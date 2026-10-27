@@ -3,8 +3,7 @@
 #include <time.h>
 #include <string.h>
 
-// Δημιουργούμε έναν τυχαίο τετραψήφιο κωδικό
-// χωρίς επαναλαμβανόμενα ψηφία.
+
 void generateCode(char secretCode[])
 {
     int used[10] = {0};
@@ -14,7 +13,7 @@ void generateCode(char secretCode[])
     {
         int digit = rand() % 10;
 
-        // Ο κωδικός δεν ξεκινά με μηδέν.
+        // Γ ΓªΓΉΓ¤Γ©ΓªΓΌΓ² Γ¤Γ¥Γ­ Γ®Γ¥ΓªΓ©Γ­Γ Γ¬Γ¥ Γ¬Γ§Γ¤ΓΓ­.
         if (i == 0 && digit == 0)
         {
             continue;
@@ -30,8 +29,6 @@ void generateCode(char secretCode[])
 
     secretCode[4] = '\0';
 }
-
-// Ξεκινάμε νέα παρτίδα και καθαρίζουμε τα προηγούμενα δεδομένα.
 void resetGame(
     char secretCode[],
     int *attempts,
@@ -91,17 +88,14 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        // Ελέγχουμε αν η παρτίδα ξεκίνησε μόλις τώρα.
         bool justStarted = false;
 
-        // Ξεκινάμε την πρώτη παρτίδα.
         if (!gameStarted && IsKeyPressed(KEY_ENTER))
         {
             gameStarted = true;
             justStarted = true;
         }
 
-        // Ξεκινάμε νέα παρτίδα μετά τη νίκη ή την ήττα.
         if ((gameWon || gameOver) && IsKeyPressed(KEY_ENTER))
         {
             resetGame(
@@ -121,7 +115,6 @@ int main(void)
             justStarted = true;
         }
 
-        // Διαβάζουμε τα ψηφία της μαντεψιάς.
         if (gameStarted && !gameOver && !gameWon &&
             guessLength < 4)
         {
@@ -143,7 +136,6 @@ int main(void)
             }
         }
 
-        // Διαγράφουμε το τελευταίο ψηφίο με BACKSPACE.
         if (gameStarted && !gameOver && !gameWon &&
             IsKeyPressed(KEY_BACKSPACE) && guessLength > 0)
         {
@@ -153,8 +145,6 @@ int main(void)
             showMessage = false;
         }
 
-        // Το Enter δεν υποβάλλει μαντεψιά στο ίδιο
-        // πάτημα με το οποίο ξεκινά η παρτίδα.
         if (gameStarted && !gameOver && !gameWon &&
             !justStarted && IsKeyPressed(KEY_ENTER))
         {
@@ -166,7 +156,6 @@ int main(void)
             }
             else
             {
-                // Ελέγχουμε αν υπάρχουν επαναλαμβανόμενα ψηφία.
                 int usedDigits[10] = {0};
                 int unique = 1;
 
@@ -190,11 +179,8 @@ int main(void)
                 }
                 else
                 {
-                    // Μειώνουμε τις προσπάθειες μόνο
-                    // για έγκυρη μαντεψιά.
                     attempts--;
 
-                    // Μετράμε τα ψηφία στη σωστή θέση.
                     correctPosition = 0;
 
                     for (int i = 0; i < 4; i++)
@@ -205,8 +191,6 @@ int main(void)
                         }
                     }
 
-                    // Μετράμε τα ψηφία που υπάρχουν
-                    // στον κωδικό αλλά βρίσκονται σε λάθος θέση.
                     wrongPosition = 0;
 
                     for (int i = 0; i < 4; i++)
@@ -226,7 +210,6 @@ int main(void)
                         }
                     }
 
-                    // Ελέγχουμε αν ο παίκτης κέρδισε ή έχασε.
                     if (strcmp(guess, secretCode) == 0)
                     {
                         gameWon = true;
@@ -245,9 +228,6 @@ int main(void)
                     {
                         strcpy(message, "Wrong code! Try again.");
                     }
-
-                    // Καθαρίζουμε τη μαντεψιά μόνο
-                    // αν συνεχίζεται η παρτίδα.
                     if (!gameWon && !gameOver)
                     {
                         guessLength = 0;
@@ -257,7 +237,6 @@ int main(void)
             }
         }
 
-        // Σχεδιάζουμε την οθόνη.
         BeginDrawing();
 
         ClearBackground((Color){20, 24, 45, 255});
@@ -293,12 +272,9 @@ int main(void)
                 300, 190, 20, LIGHTGRAY
             );
 
-            // Εμφανίζουμε το μήνυμα όταν υπάρχει αποτέλεσμα.
             if (showMessage)
             {
                 DrawText(message, 100, 230, 20, YELLOW);
-
-                // Εμφανίζουμε τις θέσεις μετά από έγκυρη μαντεψιά.
                 if (strcmp(message, "Wrong code! Try again.") == 0 ||
                     strcmp(message, "Correct! You cracked the code!") == 0 ||
                     strcmp(message, "Game over! No attempts left.") == 0)
