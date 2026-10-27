@@ -13,7 +13,6 @@ void generateCode(char secretCode[])
     {
         int digit = rand() % 10;
 
-        // Ï êùäéêüò äåí îåêéíÜ ìå ìçäÝí.
         if (i == 0 && digit == 0)
         {
             continue;
